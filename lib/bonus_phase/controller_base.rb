@@ -1,0 +1,20 @@
+require_relative '../phase6/controller_base'
+
+module BonusPhase
+  class ControllerBase < Phase6::ControllerBase
+    def redirect_to(url)
+      super(url)
+      cookie.store_flash(@res)
+    end
+
+    def render_content(content, content_type)
+      super(content, content_type)
+      flash.store_flash(@res)
+    end
+
+    # method exposing a `Flash` object
+    def flash
+      @flash ||= Flash.new(@req)
+    end
+  end
+end
