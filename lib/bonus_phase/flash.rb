@@ -1,27 +1,30 @@
-module Phase6
+module BonusPhase
   class Flash
     # Find and deserialize the cookie
     def initialize(req)
-      raw_cookie = req.cookies.find { |cook| cook.name == "_rails_lite_app" }
-      @cookie = raw_cookie ? JSON.parse(raw_cookie.value) : {}
-      @cookie[:count] ||= 2 # number of responses left
+      raw_cookie = req.cookies.find { |cook| cook.name == "_rails_lite_flash" }
+      @now = raw_cookie ? JSON.parse(raw_cookie.value) : {}
+      @later = {}
     end
 
     def [](key)
-      @cookie[key]
+      @now[key] || @later[key]
     end
 
     def []=(key, val)
-      @cookie[key] = val
+      @later[key] = val
+    end
+
+    def now
+      @now
     end
 
     # serialize the hash into json and save in a cookie
     def store_flash(res)
-      @cookie[:count] -= 1
-      if @cookie[:count] > 0
-        res.cookies << WEBrick::Cookie.new('_rails_lite_app', @cookie.to_json)
-      else
-        req.cookies.delete(@cookie)
-      end
+      cookie = WEBrick::Cookie.new('_rails_lite_flash', @later.to_json)
+      cookie.path = '/'
+      res.cookies << cookie
     end
+
   end
+end

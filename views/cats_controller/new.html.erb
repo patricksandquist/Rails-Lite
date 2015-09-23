@@ -1,4 +1,5 @@
 <form action="/cats" method="POST">
+  <%= flash[:errors] %>
   <label>Name
     <input type="text" name="cat[name]" value="<%= @cat.name %>">
   </label>
