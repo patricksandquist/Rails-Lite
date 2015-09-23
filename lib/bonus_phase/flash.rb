@@ -18,6 +18,10 @@ module Phase6
     # serialize the hash into json and save in a cookie
     def store_flash(res)
       @cookie[:count] -= 1
-      res.cookies << WEBrick::Cookie.new('_rails_lite_app', @cookie.to_json) if @count > 0
+      if @cookie[:count] > 0
+        res.cookies << WEBrick::Cookie.new('_rails_lite_app', @cookie.to_json)
+      else
+        req.cookies.delete(@cookie)
+      end
     end
   end
