@@ -1,7 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'webrick'
-require_relative '../lib/bonus_phase/controller_base'
+require_relative '../lib/controller'
 
 class Cat
   attr_reader :name, :owner
@@ -27,7 +27,7 @@ class Cat
   end
 end
 
-class CatsController < BonusPhase::ControllerBase
+class CatsController < ControllerBase
   def create
     @cat = Cat.new(params["cat"])
     if @cat.save
