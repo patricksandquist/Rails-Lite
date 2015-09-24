@@ -7,7 +7,7 @@ class Flash
   end
 
   def [](key)
-    @now[key] || @later[key]
+    @now[key] || (@later[key] || @later[key.to_s])
   end
 
   def []=(key, val)
@@ -24,5 +24,4 @@ class Flash
     cookie.path = '/'
     res.cookies << cookie
   end
-
 end
